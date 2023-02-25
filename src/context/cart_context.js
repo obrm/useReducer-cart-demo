@@ -1,7 +1,9 @@
 import React, { useContext, useReducer, useEffect } from 'react';
 
-import cartItems from './data';
-import reducer from './reducer';
+import { CART_ACTIONS } from '../constants/cart.actions';
+
+import cartItems from '../data';
+import reducer from '../reducers/cart_reducer';
 
 const url = 'https://course-api.com/react-useReducer-cart-project';
 
@@ -18,30 +20,30 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
+    dispatch({ type: CART_ACTIONS.CLEAR_CART });
   };
 
   const remove = (id) => {
-    dispatch({ type: 'REMOVE', payload: id });
+    dispatch({ type: CART_ACTIONS.REMOVE, payload: id });
   };
 
   const increase = (id) => {
-    dispatch({ type: 'INCREASE', payload: id });
+    dispatch({ type: CART_ACTIONS.INCREASE, payload: id });
   };
 
   const decrease = (id) => {
-    dispatch({ type: 'DECREASE', payload: id });
+    dispatch({ type: CART_ACTIONS.DECREASE, payload: id });
   };
 
   const fetchData = async () => {
-    dispatch({ type: 'LOADING' });
+    dispatch({ type: CART_ACTIONS.LOADING });
     const response = await fetch(url);
     const cart = await response.json();
-    dispatch({ type: 'DISPLAY_ITEMS', payload: cart });
+    dispatch({ type: CART_ACTIONS.DISPLAY_ITEMS, payload: cart });
   };
 
   const toggleAmount = (id, type) => {
-    dispatch({ type: 'TOGGLE_AMOUNT', payload: { id, type } });
+    dispatch({ type: CART_ACTIONS.TOGGLE_AMOUNT, payload: { id, type } });
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const AppProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    dispatch({ type: 'GET_TOTALS' });
+    dispatch({ type: CART_ACTIONS.GET_TOTALS });
   }, [state.cart]);
 
   return (
@@ -68,7 +70,6 @@ const AppProvider = ({ children }) => {
   );
 };
 
-// make sure use
 export const useGlobalContext = () => {
   return useContext(AppContext);
 };

@@ -1,8 +1,8 @@
 import CartItem from '../components/CartItem';
 import Navbar from '../components/Navbar';
+import Button from './../components/Button';
 
 import { useGlobalContext } from '../context/cart_context';
-import Button from './../components/Button';
 
 const CartContainer = () => {
   const { loading, cart, total } = useGlobalContext();

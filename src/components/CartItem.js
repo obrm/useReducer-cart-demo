@@ -1,6 +1,5 @@
 import Button from './Button';
 
-
 const CartItem = ({ id, img, title, price, amount }) => {
   return (
     <article className='cart-item'>

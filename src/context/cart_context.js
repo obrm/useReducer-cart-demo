@@ -17,13 +17,6 @@ const initialState = {
 };
 
 const AppProvider = ({ children }) => {
-  /*
-    useReducer returns the current state and a dispatch function that will dispatch actions.
-    Those actions will be consumed by the reducer function we pass as the first argument to 
-    the useReducer hook. This function will trigger automatically once an action is dispatched.
-    This function also receives the latest state and must return the new updated state.
-    Usually we will also pass to this hook the initial state.
-  */
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const clearCart = () => {

@@ -2,9 +2,10 @@ import CartItem from '../components/CartItem';
 import Navbar from '../components/Navbar';
 
 import { useGlobalContext } from '../context/cart_context';
+import Button from './../components/Button';
 
 const CartContainer = () => {
-  const { loading, cart, total, clearCart } = useGlobalContext();
+  const { loading, cart, total } = useGlobalContext();
 
   return (
     <>
@@ -38,9 +39,9 @@ const CartContainer = () => {
                     total <span>${total}</span>
                   </h4>
                 </div>
-                <button className='btn clear-btn' onClick={clearCart}>
+                <Button className='btn clear-btn'>
                   clear cart
-                </button>
+                </Button>
               </footer>
             </section>
       )}

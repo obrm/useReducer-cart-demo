@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect } from 'react';
+import React, { useContext, useReducer, useEffect, useCallback, useMemo } from 'react';
 
 import { CART_ACTIONS } from '../constants/cart.actions';
 
@@ -15,55 +15,61 @@ const initialState = {
   amount: 0,
 };
 
+const fetchData = async () => {
+  const response = await fetch(url);
+  const cart = await response.json();
+  return cart;
+};
+
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     dispatch({ type: CART_ACTIONS.CLEAR_CART });
-  };
+  }, []);
 
-  const remove = (id) => {
+  const remove = useCallback((id) => {
     dispatch({ type: CART_ACTIONS.REMOVE, payload: id });
-  };
+  }, []);
 
-  const increase = (id) => {
+  const increase = useCallback((id) => {
     dispatch({ type: CART_ACTIONS.INCREASE, payload: id });
-  };
+  }, []);
 
-  const decrease = (id) => {
+  const decrease = useCallback((id) => {
     dispatch({ type: CART_ACTIONS.DECREASE, payload: id });
-  };
+  }, []);
 
-  const fetchData = async () => {
+  const memoizedFetchData = useCallback(async () => {
     dispatch({ type: CART_ACTIONS.LOADING });
-    const response = await fetch(url);
-    const cart = await response.json();
+    const cart = await fetchData();
     dispatch({ type: CART_ACTIONS.DISPLAY_ITEMS, payload: cart });
-  };
+  }, []);
 
-  const toggleAmount = (id, type) => {
+  const toggleAmount = useCallback((id, type) => {
     dispatch({ type: CART_ACTIONS.TOGGLE_AMOUNT, payload: { id, type } });
-  };
+  }, []);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    memoizedFetchData();
+  }, [memoizedFetchData]);
 
   useEffect(() => {
     dispatch({ type: CART_ACTIONS.GET_TOTALS });
   }, [state.cart]);
 
+  // Memoize the value of the context object using useMemo
+  const contextValue = useMemo(() => ({
+    ...state,
+    clearCart,
+    remove,
+    increase,
+    decrease,
+    toggleAmount,
+  }), [state, clearCart, remove, increase, decrease, toggleAmount]);
+
   return (
-    <AppContext.Provider
-      value={{
-        ...state,
-        clearCart,
-        remove,
-        increase,
-        decrease,
-        toggleAmount,
-      }}
-    >
+    <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
   );

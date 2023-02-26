@@ -6,7 +6,7 @@ import { useGlobalContext } from '../context/cart_context';
 
 const CartContainer = () => {
   const { loading, cart, total } = useGlobalContext();
-
+  console.log()
   return (
     <>
       <Navbar />
